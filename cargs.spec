@@ -1,11 +1,16 @@
 Name:           cargs
-Version:        1.1.0
+Version:        1.2.0
 Release:        0%{?autorelease}
 Summary:        A lightweight cross-platform getopt alternative that is tested on Linux, Windows, FreeBSD and macOS..
 
 License:        LGPL
 URL:            https://github.com/likle/cargs/
 Source:         %{url}/archive/refs/tags/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
+BuildRequires:  rpm_macro(cmake)
+BuildRequires:  rpm_macro(cmake_build)
+BuildRequires:  rpm_macro(cmake_install)
+BuildRequires:  cmake
+BuildRequires:  gcc
 
 %description
 libcargs - command line argument library for C/C++
@@ -37,9 +42,14 @@ Summary:        Development libraries and header files for %{name}
 
 %install
 %cmake_install
+mv %{buildroot}%{_libdir}/lib%{name}.so{,.0}
+ln -s %{buildroot}%{_libdir}/lib%{name}.so{.0,}
+
+%files
+%{_libdir}/lib%{name}.so.0
 
 %files devel
 %{_libdir}/pkgconfig/%{name}.pc
 %{_libdir}/cmake/%{name}/*.cmake
-%{_libdir}/lib%{name}.a
+%{_libdir}/lib%{name}.so
 %{_includedir}/%{name}.h
